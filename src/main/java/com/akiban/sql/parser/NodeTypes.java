@@ -217,7 +217,8 @@ public interface NodeTypes
     public static final int ROW_CTOR_NODE = 166;
     public static final int GROUP_CONCAT_NODE = 167;
     public static final int AT_RENAME_NODE = 168;
-    // 169 - 182 available
+    public static final int AT_RENAME_COLUMN_NODE = 169;
+    // 170 - 182 available
     public static final int ALTER_SERVER_NODE = 183;
     public static final int TIMESTAMP_ADD_FN_NODE = 184;
     public static final int TIMESTAMP_DIFF_FN_NODE = 185;

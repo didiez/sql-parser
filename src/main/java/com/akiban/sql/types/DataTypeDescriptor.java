@@ -65,6 +65,12 @@ public final class DataTypeDescriptor
 {
     public static final int MAXIMUM_WIDTH_UNKNOWN = -1;
 
+    public static final DataTypeDescriptor MEDIUMINT =
+        new DataTypeDescriptor(TypeId.MEDIUMINT_ID, true);
+    
+    public static final DataTypeDescriptor MEDIUMINT_NOT_NULL =
+        MEDIUMINT.getNullabilityType(true);
+    
     /**
      * Runtime INTEGER type that is nullable.
      */
@@ -1088,9 +1094,12 @@ public final class DataTypeDescriptor
     }
 
     public DataTypeDescriptor getUnsigned() throws StandardException {
+
         TypeId unsignedTypeId;
         if (typeId == TypeId.SMALLINT_ID)
             unsignedTypeId = TypeId.SMALLINT_UNSIGNED_ID;
+        else if (typeId == TypeId.MEDIUMINT_ID)
+            unsignedTypeId = TypeId.MEDIUMINT_UNSIGNED_ID;
         else if (typeId == TypeId.INTEGER_ID)
             unsignedTypeId = TypeId.INTEGER_UNSIGNED_ID;
         else if (typeId == TypeId.TINYINT_ID)

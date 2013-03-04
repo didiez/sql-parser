@@ -629,6 +629,9 @@ public final class NodeFactoryImpl extends NodeFactory
 
         case NodeTypes.AT_RENAME_NODE:
             return NodeNames.AT_RENAME_NODE_NAME;
+            
+        case NodeTypes.AT_RENAME_COLUMN_NODE:
+            return NodeNames.AT_RENAME_COLUMN_NODE_NAME;
 
         case NodeTypes.DECLARE_STATEMENT_NODE:
             return NodeNames.DECLARE_STATEMENT_NODE_NAME;

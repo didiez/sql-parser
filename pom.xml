@@ -4,7 +4,7 @@
     <groupId>com.akiban</groupId>
     <artifactId>akiban-sql-parser</artifactId>
     <packaging>jar</packaging>
-    <version>1.0.13-SNAPSHOT</version>
+    <version>1.0.14-SNAPSHOT</version>
     <name>akiban-sql-parser</name>
     <url>http://maven.apache.org</url>
     <properties>
@@ -166,6 +166,7 @@
                         <exclude>**/*.error</exclude>
                         <exclude>**/*.jj</exclude>
                         <exclude>**/*.features</exclude>
+                        <exclude>release_files/**</exclude>
                         <exclude>.bzrignore</exclude>
                         <exclude>.idea/**</exclude>
                         <exclude>LICENSE.txt</exclude>

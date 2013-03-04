@@ -29,7 +29,7 @@ public class IndexColumnList extends QueryTreeNodeList<IndexColumn>
 
     public static enum FunctionType
     {
-        Z_ORDER_LAT_LON
+        Z_ORDER_LAT_LON, FULL_TEXT
         // ADD MORE AS NEEDED
     }
 

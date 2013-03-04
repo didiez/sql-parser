@@ -76,6 +76,8 @@ public interface NodeNames
 
     static final String AT_RENAME_NODE_NAME = "com.akiban.sql.parser.AlterTableRenameNode";
 
+    static final String AT_RENAME_COLUMN_NODE_NAME = "com.akiban.sql.parser.AlterTableRenameColumnNode";
+    
     static final String AND_NODE_NAME = "com.akiban.sql.parser.AndNode";
 
     static final String BASE_COLUMN_NODE_NAME = "com.akiban.sql.parser.BaseColumnNode";

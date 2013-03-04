@@ -160,6 +160,7 @@ public class TypeId
     public static final String LONGVARBIT_NAME = "LONG VARCHAR FOR BIT DATA";
     public static final String TINYINT_NAME = "TINYINT";
     public static final String SMALLINT_NAME = "SMALLINT";
+    public static final String MEDIUMINT_NAME = "MEDIUMINT";
     public static final String INTEGER_NAME = "INTEGER";
     public static final String INT_NAME = "INT";
     public static final String LONGINT_NAME = "BIGINT";
@@ -219,6 +220,7 @@ public class TypeId
     // MySQL compatible types.
     public static final String TINYINT_UNSIGNED_NAME = "TINYINT UNSIGNED";
     public static final String SMALLINT_UNSIGNED_NAME = "SMALLINT UNSIGNED";
+    public static final String MEDIUMINT_UNSIGNED_NAME = "MEDIUMINT UNSIGNED";
     public static final String INTEGER_UNSIGNED_NAME = "INTEGER UNSIGNED";
     public static final String INT_UNSIGNED_NAME = "INT UNSIGNED";
     public static final String LONGINT_UNSIGNED_NAME = "BIGINT UNSIGNED";
@@ -288,10 +290,12 @@ public class TypeId
         public static final int ROW_MULTISET_TYPE_ID_IMPL = 23;
         public static final int INTERVAL_YEAR_MONTH_ID = 24;
         public static final int INTERVAL_DAY_SECOND_ID = 25;
+        public static final int MEDIUMINT_ID = 26;
     }
 
     public static final TypeId BOOLEAN_ID = new TypeId(FormatIds.BOOLEAN_TYPE_ID);
     public static final TypeId SMALLINT_ID = new TypeId(FormatIds.SMALLINT_TYPE_ID);
+    public static final TypeId MEDIUMINT_ID = new TypeId(FormatIds.MEDIUMINT_ID);
     public static final TypeId INTEGER_ID = new TypeId(FormatIds.INT_TYPE_ID);
     public static final TypeId CHAR_ID = new TypeId(FormatIds.CHAR_TYPE_ID);
     public static final TypeId TINYINT_ID = new TypeId(FormatIds.TINYINT_TYPE_ID);
@@ -328,6 +332,7 @@ public class TypeId
     public static final TypeId INTERVAL_MINUTE_SECOND_ID = new TypeId(FormatIds.INTERVAL_DAY_SECOND_ID, INTERVAL_MINUTE_SECOND_NAME);
 
     public static final TypeId SMALLINT_UNSIGNED_ID = new TypeId(FormatIds.SMALLINT_TYPE_ID, true);
+    public static final TypeId MEDIUMINT_UNSIGNED_ID = new TypeId(FormatIds.MEDIUMINT_ID, true);
     public static final TypeId INTEGER_UNSIGNED_ID = new TypeId(FormatIds.INT_TYPE_ID, true);
     public static final TypeId TINYINT_UNSIGNED_ID = new TypeId(FormatIds.TINYINT_TYPE_ID, true);
     public static final TypeId BIGINT_UNSIGNED_ID = new TypeId(FormatIds.LONGINT_TYPE_ID, true);
@@ -341,6 +346,7 @@ public class TypeId
     private static final TypeId[] ALL_BUILTIN_TYPE_IDS = {
         BOOLEAN_ID,
         SMALLINT_ID,
+        MEDIUMINT_ID,
         INTEGER_ID,
         CHAR_ID,
         TINYINT_ID,
@@ -624,6 +630,8 @@ public class TypeId
         if (SQLTypeName.equals(FLOAT_NAME)) {
             return REAL_ID;
         }
+        if (SQLTypeName.equals(MEDIUMINT_NAME))
+            return MEDIUMINT_ID;
         if (SQLTypeName.equals(INTEGER_NAME) ||
             SQLTypeName.equals(INT_NAME)) {
             return INTEGER_ID;
@@ -883,6 +891,18 @@ public class TypeId
             isFloatingPointTypeId = true;
             break;
 
+        case FormatIds.MEDIUMINT_ID:
+            schemaName = null;
+            unqualifiedName = TypeId.MEDIUMINT_NAME;
+            JDBCTypeId = Types.OTHER;
+            maxPrecision = TypeId.INT_PRECISION;
+            maxScale = TypeId.INT_SCALE;
+            typePrecedence = INT_PRECEDENCE;
+            javaTypeName = "java.lang.Integer";
+            maxMaxWidth = TypeId.INT_MAXWIDTH;
+            isNumericTypeId = true;
+            break;
+            
         case FormatIds.INT_TYPE_ID:
             schemaName = null;
             unqualifiedName = TypeId.INTEGER_NAME;
@@ -1136,8 +1156,11 @@ public class TypeId
             case FormatIds.TINYINT_TYPE_ID:
                 unqualifiedName = TypeId.TINYINT_UNSIGNED_NAME;
                 break;
+            case FormatIds.MEDIUMINT_ID:
+                unqualifiedName = TypeId.MEDIUMINT_UNSIGNED_NAME;
+                break;
             default:
-                assert false;
+                assert false : "unknown formatId: " + formatId;
             }
         }
     }

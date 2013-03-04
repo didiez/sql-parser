@@ -497,6 +497,7 @@ class SQLGrammar
         case CHAR:
         case VARCHAR:
         case INTEGER:
+        case MEDIUMINT:
         case INT:
         case SMALLINT:
         case LONGINT:
@@ -1049,6 +1050,7 @@ class SQLGrammar
         case DECIMAL:
         case DEC:
         case INTEGER:
+        case MEDIUMINT:
         case INT:
         case SMALLINT:
         case LONGINT:
@@ -2147,6 +2149,7 @@ TOKEN [IGNORE_CASE] :
 | <INSERT: "insert">
 | <INT: "int">
 | <INTEGER: "integer">
+| <MEDIUMINT: "mediumint">
 | <INTERSECT: "intersect">
 | <INTO: "into">
 | <IS: "is">
@@ -2251,7 +2254,6 @@ TOKEN [IGNORE_CASE] :
 | <WORK: "work">
 | <WRITE: "write">
 | <YEAR: "year">
-| <Z_ORDER_LAT_LON: "z_order_lat_lon">
 }
 
 /* This list should contain only and all SQL92 keywords that are
@@ -2390,6 +2392,7 @@ TOKEN [IGNORE_CASE] :
 | <XMLPARSE:    "xmlparse">
 | <XMLQUERY:    "xmlquery">
 | <XMLSERIALIZE:    "xmlserialize">
+| <Z_ORDER_LAT_LON: "z_order_lat_lon">
 }
 
 /* This list should contain non-SQL92 keywords that are not reserved.
@@ -2431,6 +2434,7 @@ TOKEN [IGNORE_CASE] :
 | <FN: "fn">
 | <FORCE: "force">
 | <FORMAT: "format">
+| <FULL_TEXT: "full_text">
 | <HEADER: "header">
 | <HOUR_MICROSECOND: "hour_microsecond">
 | <HOUR_MINUTE: "hour_minute">
@@ -4135,6 +4139,8 @@ numericType() throws StandardException :
 }
 {
 (
+    <MEDIUMINT> {typeDescriptor = DataTypeDescriptor.MEDIUMINT;}
+|
     typeDescriptor = exactNumericType()
 |
     typeDescriptor = approximateNumericType()
@@ -4207,6 +4213,10 @@ exactIntegerType() throws StandardException :
     ( <INTEGER> | <INT> )
     {
         return DataTypeDescriptor.getBuiltInDataTypeDescriptor(Types.INTEGER);
+    }
+    <MEDIUMINT>
+    {
+        return DataTypeDescriptor.MEDIUMINT;
     }
 |
     <SMALLINT>
@@ -11888,20 +11898,32 @@ renameColumnStatement() throws StandardException :
 {
     String newColumnName;
     ColumnReference oldColumnReference;
+    TableElementList tableElementList;
+    TableName tableName;
 }
 {
     <COLUMN> oldColumnReference = columnReference()
     <TO> newColumnName = identifier()
     {
-        if (oldColumnReference.getTableNameNode() == null)
+        if ((tableName = oldColumnReference.getTableNameNode()) == null)
             throw new StandardException("Table name missing in RENAME COLUMN");
-        return (StatementNode)nodeFactory.getNode(NodeTypes.RENAME_NODE,
-                                                  oldColumnReference.getTableNameNode(),
-                                                  oldColumnReference.getColumnName(),
-                                                  newColumnName,
-                                                  Boolean.FALSE,
-                                                  RenameNode.RenameType.COLUMN,
-                                                  parserContext);
+
+        tableElementList = (TableElementList)nodeFactory
+                    .getNode(NodeTypes.TABLE_ELEMENT_LIST, parserContext);
+
+        tableElementList.addTableElement((TableElementNode)nodeFactory
+                    .getNode(NodeTypes.AT_RENAME_COLUMN_NODE,
+                             oldColumnReference.getColumnName(),
+                             newColumnName,
+                             parserContext));
+
+        return (StatementNode)nodeFactory.getNode(NodeTypes.ALTER_TABLE_NODE,
+                                                  tableName,
+                                                  tableElementList,
+                                                  new Character('\0'),
+                                                  new int[] {DDLStatementNode.MODIFY_TYPE},
+                                                  new int[] {0},
+                                                  parserContext);  
     }
 }
 
@@ -13155,6 +13177,7 @@ alterTableAction(TableElementList tableElementList, int[] changeType, int[] beha
     DataTypeDescriptor  typeDescriptor;
     Token tok = null;
     String name;
+    String newCName;
     TableName newName;
     long[] autoIncrementInfo = new long[4];
 }
@@ -13197,12 +13220,27 @@ alterTableAction(TableElementList tableElementList, int[] changeType, int[] beha
         tableElementList.addTableElement(tableElement);
     }
 |
-    <RENAME> [<TO> | <AS>] newName = qualifiedName()
+    <RENAME>
+    (
+        LOOKAHEAD ( {getToken(1).kind == COLUMN} )
+        <COLUMN> name = identifier() [<TO> | <AS>] newCName = identifier()
+        {
+            tableElement = (TableElementNode)nodeFactory.getNode(NodeTypes.AT_RENAME_COLUMN_NODE,
+                                                                 name,
+                                                                 newCName,
+                                                                 parserContext);
+        }
+    |
+        [<TABLE>] [<TO> | <AS>] newName = qualifiedName()
+        {
+            tableElement = (TableElementNode)nodeFactory.getNode(NodeTypes.AT_RENAME_NODE,
+                                                                 newName,
+                                                                 parserContext);
+        }
+    )
     {
+
         changeType[0] = DDLStatementNode.MODIFY_TYPE;
-        tableElement = (TableElementNode)nodeFactory.getNode(NodeTypes.AT_RENAME_NODE,
-                                                             newName,
-                                                             parserContext);
         tableElementList.addTableElement(tableElement);
     }
 }
@@ -14438,9 +14476,14 @@ delimitedIdentifier() :
 }
 {
 (
+    tok = <SINGLEQUOTED_STRING>
+    {
+	// Strip quotes and correct interior ones.
+        str = trimAndCompressQuotes(tok.image, SINGLEQUOTES, false);
+    }
+|
     tok = <DOUBLEQUOTED_IDENTIFIER>
     {
-        // Strip quotes and correct interior ones.
         str = trimAndCompressQuotes(tok.image, DOUBLEQUOTES, false);
     }
 |
@@ -14574,6 +14617,7 @@ reservedKeyword() :
 | tok = <INSERT>
 | tok = <INT>
 | tok = <INTEGER>
+| tok = <MEDIUMINT>
 | tok = <INTERSECT>
 | tok = <INTERVAL>
 | tok = <INTO>
@@ -14769,6 +14813,7 @@ nonReservedKeyword() :
 | tok = <FORCE>
 | tok = <FORMAT>
 | tok = <FORTRAN>
+| tok = <FULL_TEXT>
 | tok = <GENERATED>
 | tok = <HEADER>
 | tok = <HOUR_MICROSECOND>
@@ -14987,6 +15032,9 @@ void
 groupIndexItemList(IndexColumnList columnList) throws StandardException :
 {}
 {
+    LOOKAHEAD( { getToken(1).kind == FULL_TEXT && getToken(2).kind == LEFT_PAREN } )
+    fullTextColumnItemList(columnList)
+|
     groupIndexItem(columnList) 
     ( <COMMA> groupIndexItem(columnList) )*
 }
@@ -15012,6 +15060,20 @@ void groupIndexItem(IndexColumnList columnList) throws StandardException :
     )
     |
       groupIndexColumnItem(columnList)
+}
+
+void fullTextColumnItemList(IndexColumnList columnList) throws StandardException :
+{
+}
+{
+      <FULL_TEXT> <LEFT_PAREN>
+      groupIndexColumnItem(columnList)
+      ( <COMMA> groupIndexColumnItem(columnList) )*
+      <RIGHT_PAREN>
+      {
+          columnList.applyFunction(IndexColumnList.FunctionType.FULL_TEXT,
+                                   0, columnList.size());
+      }
 }
 
 void
