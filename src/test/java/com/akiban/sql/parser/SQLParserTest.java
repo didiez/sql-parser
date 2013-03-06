@@ -81,7 +81,7 @@ public class SQLParserTest extends TestBase implements TestBase.GenerateAndCheck
 
     protected String getTree(StatementNode stmt) throws IOException {
         StringWriter str = new StringWriter();
-        stmt.treePrint(str);
+        stmt.treePrint(str);	
         return str.toString().trim();
     }
 

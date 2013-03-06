@@ -1,0 +1,61 @@
+com.akiban.sql.parser.CursorNode@19da4fc
+name: null
+updateMode: UNSPECIFIED
+statementType: SELECT
+resultSet: 	
+	com.akiban.sql.parser.SelectNode@baa466
+	isDistinct: false
+	resultColumns: 		
+		com.akiban.sql.parser.ResultColumnList@17f409c
+
+		[0]:		
+		com.akiban.sql.parser.ResultColumn@16acdd1
+		exposedName: fechanacimiento
+		name: fechanacimiento
+		tableName: null
+		isDefaultColumn: false
+		type: null
+		expression: 			
+			com.akiban.sql.parser.ColumnReference@ee6681
+			columnName: fechanacimiento
+			tableName: null
+			type: null
+		[1]:		
+		com.akiban.sql.parser.ResultColumn@18bbc5a
+		exposedName: max dni
+		name: max dni
+		tableName: null
+		isDefaultColumn: false
+		type: null
+		expression: 			
+			com.akiban.sql.parser.AggregateNode@facf0b
+			aggregateName: MAX
+			operator: null
+			methodName: null
+			type: null
+			operand: 				
+				com.akiban.sql.parser.ColumnReference@2f0df1
+				columnName: dni
+				tableName: null
+				type: null
+	fromList: 		
+		com.akiban.sql.parser.FromList@13c6a22
+
+		[0]:		
+		com.akiban.sql.parser.FromBaseTable@15c07d8
+		tableName: persona
+		updateOrDelete: null
+		null
+		correlation Name: null
+		null
+	groupByList:		
+		com.akiban.sql.parser.GroupByList@10721b0
+
+		[0]:		
+		com.akiban.sql.parser.GroupByColumn@134b07e
+		columnPosition: -1
+		columnExpression: 			
+			com.akiban.sql.parser.ColumnReference@2f48d2
+			columnName: fechanacimiento
+			tableName: null
+			type: null

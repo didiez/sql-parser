@@ -49,6 +49,7 @@ import com.akiban.sql.StandardException;
 public class GroupByColumn extends OrderedColumn 
 {
     private ValueNode columnExpression;
+    private boolean ascending = true;
 
     /**
      * Initializer.
@@ -68,6 +69,7 @@ public class GroupByColumn extends OrderedColumn
         GroupByColumn other = (GroupByColumn)node;
         this.columnExpression = (ValueNode)getNodeFactory().copyNode(other.columnExpression,
                                                                      getParserContext());
+	this.ascending = other.ascending;
     }
 
     /**
@@ -102,6 +104,23 @@ public class GroupByColumn extends OrderedColumn
     public void setColumnExpression(ValueNode cexpr) {
         this.columnExpression = cexpr;
 
+    }
+    
+    /**
+     * Mark the column as descending order
+     */
+    public void setDescending() {
+        ascending = false;
+    }
+
+    /**
+     * Get the column order.    Overrides 
+     * OrderedColumn.isAscending.
+     *
+     * @return true if ascending, false if descending
+     */
+    public boolean isAscending() {
+        return ascending;
     }
 
     /**

@@ -1,0 +1,37 @@
+com.akiban.sql.parser.CursorNode@3e1d25
+name: null
+updateMode: UNSPECIFIED
+statementType: SELECT
+resultSet: 	
+	com.akiban.sql.parser.SelectNode@1eb717e
+	isDistinct: false
+	resultColumns: 		
+		com.akiban.sql.parser.ResultColumnList@681db8
+
+		[0]:		
+		com.akiban.sql.parser.ResultColumn@17753a8
+		exposedName: null
+		name: null
+		tableName: null
+		isDefaultColumn: false
+		type: null
+		expression: 			
+			com.akiban.sql.parser.ExtractOperatorNode@11576d7
+			fieldName: YEAR
+			operator: EXTRACT YEAR
+			methodName: year
+			type: null
+			operand: 				
+				com.akiban.sql.parser.CurrentDatetimeOperatorNode@132e910
+				methodName: CURRENT DATE
+				type: null
+	fromList: 		
+		com.akiban.sql.parser.FromList@1635aad
+
+		[0]:		
+		com.akiban.sql.parser.FromBaseTable@1d648e2
+		tableName: t
+		updateOrDelete: null
+		null
+		correlation Name: null
+		null

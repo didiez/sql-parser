@@ -9814,10 +9814,12 @@ groupingColumnReferenceList() throws StandardException :
 void
 groupingColumnReference(GroupByList groupingCols) throws StandardException :
 {
+    boolean asc = true;
     ValueNode columnExpression;
 }
 {
     columnExpression = additiveExpression()
+    [ <ASC> | <DESC> { asc = false; } ]
     {
         /* Aggregates not allowed in group by */
         HasNodeVisitor visitor = new HasNodeVisitor(AggregateNode.class);
@@ -9829,10 +9831,11 @@ groupingColumnReference(GroupByList groupingCols) throws StandardException :
         if (columnExpression.isParameterNode()) {
             throw new StandardException("Parameters not allowed in GROUP BY");
         }
-        groupingCols.addGroupByColumn(
-            (GroupByColumn)nodeFactory.getNode(NodeTypes.GROUP_BY_COLUMN,
+	GroupByColumn column = (GroupByColumn)nodeFactory.getNode(NodeTypes.GROUP_BY_COLUMN,
                                                columnExpression,
-                                               parserContext));
+                                               parserContext);
+	if(!asc) column.setDescending();
+        groupingCols.addGroupByColumn(column);
     }
 }
 
