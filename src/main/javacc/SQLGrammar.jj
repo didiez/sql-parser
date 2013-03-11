@@ -157,6 +157,7 @@ class SQLGrammar
     private static final int EXCEPT_ALL_OP = 4;
     private static final int INTERSECT_OP = 5;
     private static final int INTERSECT_ALL_OP = 6;
+    private static final int MINUS_OP = 7;
 
     /* The default length of a [VAR]CHAR or BIT if the length is omitted. */
     private static final int DEFAULT_STRING_COLUMN_LENGTH = 1;
@@ -2165,6 +2166,7 @@ TOKEN [IGNORE_CASE] :
 | <MATCH: "match">
 | <MAX: "max">
 | <MIN: "min">
+| <MINUS: "minus">
 | <MINUTE: "minute">
 | <MODULE: "module">
 | <NATIONAL: "national">
@@ -4857,7 +4859,7 @@ nonJoinQueryTerm(ResultSetNode leftSide, int operatorType) throws StandardExcept
 }
 {
     term = nonJoinQueryPrimary() 
-    [ term = intersect( term) ]
+    [ term = intersect(term) | minus(term) ]
     {
         switch( operatorType) {
         case NO_SET_OP:
@@ -4882,8 +4884,8 @@ nonJoinQueryTerm(ResultSetNode leftSide, int operatorType) throws StandardExcept
                                                       parserContext);
 
         case EXCEPT_OP:
-            return (ResultSetNode)nodeFactory.getNode(NodeTypes.INTERSECT_OR_EXCEPT_NODE,
-                                                      IntersectOrExceptNode.OpType.EXCEPT,
+            return (ResultSetNode)nodeFactory.getNode(NodeTypes.INTERSECT_OR_EXCEPT_OR_MINUS_NODE,
+                                                      IntersectOrExceptOrMinusNode.OpType.EXCEPT,
                                                       leftSide,
                                                       term,
                                                       Boolean.FALSE,
@@ -4891,8 +4893,8 @@ nonJoinQueryTerm(ResultSetNode leftSide, int operatorType) throws StandardExcept
                                                       parserContext);
 
         case EXCEPT_ALL_OP:
-            return (ResultSetNode)nodeFactory.getNode(NodeTypes.INTERSECT_OR_EXCEPT_NODE,
-                                                      IntersectOrExceptNode.OpType.EXCEPT,
+            return (ResultSetNode)nodeFactory.getNode(NodeTypes.INTERSECT_OR_EXCEPT_OR_MINUS_NODE,
+                                                      IntersectOrExceptOrMinusNode.OpType.EXCEPT,
                                                       leftSide,
                                                       term,
                                                       Boolean.TRUE,
@@ -4900,8 +4902,8 @@ nonJoinQueryTerm(ResultSetNode leftSide, int operatorType) throws StandardExcept
                                                       parserContext);
 
         case INTERSECT_OP:
-            return (ResultSetNode)nodeFactory.getNode(NodeTypes.INTERSECT_OR_EXCEPT_NODE,
-                                                      IntersectOrExceptNode.OpType.INTERSECT,
+            return (ResultSetNode)nodeFactory.getNode(NodeTypes.INTERSECT_OR_EXCEPT_OR_MINUS_NODE,
+                                                      IntersectOrExceptOrMinusNode.OpType.INTERSECT,
                                                       leftSide,
                                                       term,
                                                       Boolean.FALSE,
@@ -4909,11 +4911,20 @@ nonJoinQueryTerm(ResultSetNode leftSide, int operatorType) throws StandardExcept
                                                       parserContext);
 
         case INTERSECT_ALL_OP:
-            return (ResultSetNode)nodeFactory.getNode(NodeTypes.INTERSECT_OR_EXCEPT_NODE,
-                                                      IntersectOrExceptNode.OpType.INTERSECT,
+            return (ResultSetNode)nodeFactory.getNode(NodeTypes.INTERSECT_OR_EXCEPT_OR_MINUS_NODE,
+                                                      IntersectOrExceptOrMinusNode.OpType.INTERSECT,
                                                       leftSide,
                                                       term,
                                                       Boolean.TRUE,
+                                                      null,
+                                                      parserContext);
+
+        case MINUS_OP:
+            return (ResultSetNode)nodeFactory.getNode(NodeTypes.INTERSECT_OR_EXCEPT_OR_MINUS_NODE,
+                                                      IntersectOrExceptOrMinusNode.OpType.MINUS,
+                                                      leftSide,
+                                                      term,
+                                                      Boolean.FALSE,
                                                       null,
                                                       parserContext);
 
@@ -4937,6 +4948,20 @@ intersect(ResultSetNode term) throws StandardException :
         if ((tok != null) && (tok.kind == DISTINCT)) { 
             forbidNextValueFor(); 
         }
+        return expression;
+    }
+}
+
+ResultSetNode
+minus(ResultSetNode term) throws StandardException :
+{
+    ResultSetNode expression;
+    Token tok = null;
+}
+{
+    <MINUS>
+    expression = nonJoinQueryTerm(term, MINUS_OP)
+    {
         return expression;
     }
 }
@@ -14644,6 +14669,7 @@ reservedKeyword() :
 | tok = <MATCH>
 | tok = <MAX>
 | tok = <MIN>
+| tok = <MINUS>
 | tok = <MINUTE>
 | tok = <NATIONAL>
 | tok = <NATURAL>

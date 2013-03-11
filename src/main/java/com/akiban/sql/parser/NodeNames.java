@@ -230,7 +230,7 @@ public interface NodeNames
 
     static final String INSERT_NODE_NAME = "com.akiban.sql.parser.InsertNode";
 
-    static final String INTERSECT_OR_EXCEPT_NODE_NAME = "com.akiban.sql.parser.IntersectOrExceptNode";
+    static final String INTERSECT_OR_EXCEPT_OR_MINUS_NODE_NAME = "com.akiban.sql.parser.IntersectOrExceptOrMinusNode";
 
     static final String IN_LIST_OPERATOR_NODE_NAME = "com.akiban.sql.parser.InListOperatorNode";
 

@@ -205,7 +205,7 @@ public interface NodeTypes
     public static final int SUBSTRING_OPERATOR_NODE = 154;
     // UNUSED public static final int BOOLEAN_NODE = 155;
     public static final int DROP_ALIAS_NODE = 156;
-    public static final int INTERSECT_OR_EXCEPT_NODE = 157;
+    public static final int INTERSECT_OR_EXCEPT_OR_MINUS_NODE = 157;
     public static final int LEFT_FN_NODE = 158;
     public static final int RIGHT_FN_NODE = 159;
     public static final int ROWS_RESULT_SET_NODE = 160;

@@ -31,7 +31,7 @@ resultSet:
 		subqueryType: EXISTS
 		type: null
 		resultSet: 			
-			com.akiban.sql.parser.IntersectOrExceptNode@518bf072
+			com.akiban.sql.parser.IntersectOrExceptOrMinusNode@518bf072
 			all: false
 			nestedInParens: false
 			correlation Name: null

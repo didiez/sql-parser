@@ -43,15 +43,16 @@ package com.akiban.sql.parser;
 import com.akiban.sql.StandardException;
 
 /**
- * A IntersectOrExceptNode represents an INTERSECT or EXCEPT DML statement.
+ * A IntersectOrExceptOrMinusNode represents an INTERSECT or EXCEPT (= MINUS) DML statement.
  *
  */
 
-public class IntersectOrExceptNode extends SetOperatorNode
+public class IntersectOrExceptOrMinusNode extends SetOperatorNode
 {
     public static enum OpType { 
         INTERSECT("INTERSECT"), 
-        EXCEPT("EXCEPT");
+        EXCEPT("EXCEPT"),
+	MINUS("MINUS");
 
         String operatorName;
         OpType(String operatorName) {
@@ -61,7 +62,7 @@ public class IntersectOrExceptNode extends SetOperatorNode
     private OpType opType;
 
     /**
-     * Initializer for an IntersectOrExceptNode.
+     * Initializer for an IntersectOrExceptOrMinusNode.
      *
      * @param leftResult The ResultSetNode on the left side of this union
      * @param rightResult The ResultSetNode on the right side of this union
@@ -87,7 +88,7 @@ public class IntersectOrExceptNode extends SetOperatorNode
     public void copyFrom(QueryTreeNode node) throws StandardException {
         super.copyFrom(node);
 
-        IntersectOrExceptNode other = (IntersectOrExceptNode)node;
+        IntersectOrExceptOrMinusNode other = (IntersectOrExceptOrMinusNode)node;
         this.opType = other.opType;
     }
 

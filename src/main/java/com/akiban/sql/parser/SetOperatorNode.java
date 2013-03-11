@@ -43,7 +43,7 @@ package com.akiban.sql.parser;
 import com.akiban.sql.StandardException;
 
 /**
- * A SetOperatorNode represents a UNION, INTERSECT, or EXCEPT in a DML statement. Binding and optimization
+ * A SetOperatorNode represents a UNION, INTERSECT, EXCEPT or MINUS in a DML statement. Binding and optimization
  * preprocessing is the same for all of these operations, so they share bind methods in this abstract class.
  *
  * The class contains a boolean telling whether the operation should eliminate
@@ -141,7 +141,7 @@ public abstract class SetOperatorNode extends TableOperatorNode
     }
 
     /**
-     * @return the operator name: "UNION", "INTERSECT", or "EXCEPT"
+     * @return the operator name: "UNION", "INTERSECT", "EXCEPT" or "MINUS"
      */
     abstract String getOperatorName();
 

@@ -472,8 +472,8 @@ public final class NodeFactoryImpl extends NodeFactory
         case NodeTypes.UNION_NODE:
             return NodeNames.UNION_NODE_NAME;
 
-        case NodeTypes.INTERSECT_OR_EXCEPT_NODE:
-            return NodeNames.INTERSECT_OR_EXCEPT_NODE_NAME;
+        case NodeTypes.INTERSECT_OR_EXCEPT_OR_MINUS_NODE:
+            return NodeNames.INTERSECT_OR_EXCEPT_OR_MINUS_NODE_NAME;
 
         case NodeTypes.CREATE_TRIGGER_NODE:
             return NodeNames.CREATE_TRIGGER_NODE_NAME;
