@@ -9177,7 +9177,9 @@ qualifiedJoin(ResultSetNode leftRSN, boolean nestedInParens) throws StandardExce
         usingClause = (ResultColumnList)onOrUsingClause[JOIN_USING];
 
         if (onClause == null && usingClause == null) {
-            throw new StandardException("Missing JOIN specification");
+	    if (!hasFeature(SQLParserFeature.MYSQL_JOIN_QUALIFIER_OPTIONAL)) {
+		throw new StandardException("Missing JOIN specification");
+	    }
         }
 
         ton = newJoinNode(leftRSN, rightRSN, onClause, usingClause, joinType);
@@ -9262,8 +9264,8 @@ joinSpecification(ResultSetNode leftRSN, ResultSetNode rightRSN)
     ResultColumnList usingClause = null;
     ValueNode joinClause = null;
 }
-{
-    joinClause = joinCondition() 
+{   
+    joinClause = joinCondition()
     {
         onOrUsingClause[JOIN_ON] = joinClause;
         onOrUsingClause[JOIN_USING] = usingClause;
@@ -9274,6 +9276,10 @@ joinSpecification(ResultSetNode leftRSN, ResultSetNode rightRSN)
     {
         onOrUsingClause[JOIN_ON] = joinClause;
         onOrUsingClause[JOIN_USING] = usingClause;
+        return onOrUsingClause;
+    }
+|
+    {
         return onOrUsingClause;
     }
 }
