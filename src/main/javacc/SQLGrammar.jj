@@ -1834,6 +1834,7 @@ MORE :
 SKIP :
 { /* comments */
     "--" : IN_COMMENT
+|   "#"	 : IN_COMMENT
 }
 
 <IN_COMMENT> SKIP :
