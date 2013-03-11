@@ -61,9 +61,11 @@ public class SQLParser implements SQLParserContext {
         EnumSet.of(SQLParserFeature.GROUPING,
                    SQLParserFeature.DIV_OPERATOR,
                    SQLParserFeature.GEO_INDEX_DEF_FUNC,
+		   SQLParserFeature.MYSQL_COLUMN_AS_FUNCS,
                    SQLParserFeature.MYSQL_HINTS,
+		   SQLParserFeature.MYSQL_JOIN_QUALIFIER_OPTIONAL,
                    SQLParserFeature.MYSQL_INTERVAL,
-                   SQLParserFeature.MYSQL_LEFT_RIGHT_FUNC,
+                   SQLParserFeature.MYSQL_LEFT_RIGHT_FUNC,		   
                    SQLParserFeature.UNSIGNED,
                    SQLParserFeature.INFIX_MOD);
 
