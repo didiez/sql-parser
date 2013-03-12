@@ -7997,11 +7997,16 @@ limitClause(ValueNode[] offsetAndFetchFirst) throws StandardException :
     Token tok = null;
 }
 {
-    <LIMIT>
+    [<LIMIT>]
     ( 
         v1 = intLiteral()
     | 
         v1 = dynamicParameterSpecification()
+    |
+	tok = <ALL>
+	{
+	    v1 = getNumericNode("-1", true);
+	}
     )
     [ ( tok = <COMMA>
             ( 
