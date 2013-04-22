@@ -214,6 +214,8 @@ public interface NodeNames
 
     static final String GROUP_CONCAT_NODE_NAME = "com.akiban.sql.parser.GroupConcatNode";
 
+    static final String FULL_OUTER_JOIN_NODE_NAME = "com.akiban.sql.parser.FullOuterJoinNode";
+    
     static final String HALF_OUTER_JOIN_NODE_NAME = "com.akiban.sql.parser.HalfOuterJoinNode";
 
     static final String HASH_TABLE_NODE_NAME = "com.akiban.sql.parser.HashTableNode";

@@ -58,7 +58,7 @@ public class JoinNode extends TableOperatorNode
 {
     /* Join semantics */
     public static enum JoinType {
-        INNER, CROSS, LEFT_OUTER, RIGHT_OUTER, FULL_OUTER, UNION, STRAIGHT
+        INNER, CROSS, FULL_OUTER, LEFT_OUTER, RIGHT_OUTER, UNION, STRAIGHT
     }
     
     /** If this flag is true, this node represents a natural join. */

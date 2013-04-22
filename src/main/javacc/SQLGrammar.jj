@@ -810,6 +810,7 @@ class SQLGrammar
      *  JOIN
      *  INNER JOIN
      *  CROSS JOIN
+     *  FULL OUTER JOIN
      *  LEFT OUTER JOIN
      *  RIGHT OUTER JOIN
      *  NATURAL [ { RIGHT | LEFT } [ OUTER ] | INNER ] JOIN
@@ -834,12 +835,12 @@ class SQLGrammar
         else if (tokKind1 == NATURAL) {
             retval = true;
         }
-        else if ((tokKind1 == LEFT || tokKind1 == RIGHT) && tokKind2 == OUTER) {
+        else if ((tokKind1 == FULL || tokKind1 == LEFT || tokKind1 == RIGHT) && tokKind2 == OUTER) {
             if (getToken(3).kind == JOIN) {
                 retval = true;
             }
         }
-        else if ((tokKind1 == LEFT || tokKind1 == RIGHT) && tokKind2 == JOIN) {
+        else if ((tokKind1 == FULL || tokKind1 == LEFT || tokKind1 == RIGHT) && tokKind2 == JOIN) {
             retval = true;
         }
         else if (hasFeature(SQLParserFeature.MYSQL_HINTS) && tokKind1 == STRAIGHT_JOIN) {
@@ -1517,6 +1518,15 @@ class SQLGrammar
                                                  usingClause,
                                                  null,
                                                  null,
+                                                 null,
+                                                 parserContext);
+
+        case FULL_OUTER:
+            return (JoinNode)nodeFactory.getNode(NodeTypes.FULL_OUTER_JOIN_NODE,
+                                                 leftRSN,
+                                                 rightRSN,
+                                                 onClause,
+                                                 usingClause,
                                                  null,
                                                  parserContext);
 
@@ -9258,6 +9268,11 @@ JoinNode.JoinType
 outerJoinType() throws StandardException :
 {}
 {
+    <FULL>
+    {
+        return JoinNode.JoinType.FULL_OUTER;
+    }
+|
     <LEFT> 
     {
         return JoinNode.JoinType.LEFT_OUTER;
@@ -9621,12 +9636,12 @@ aggregateExpression(String aggName, String aggClass) throws StandardException :
     [ distinct = setQuantifier() ] 
     value = additiveExpression()
     {
-        return (ValueNode)nodeFactory.getNode(NodeTypes.AGGREGATE_NODE,
-                                              value,
-                                              aggClass,
-                                              distinct ? Boolean.TRUE : Boolean.FALSE,
-                                              aggName,
-                                              parserContext);
+	return (ValueNode)nodeFactory.getNode(NodeTypes.AGGREGATE_NODE,
+					      value,
+					      aggClass,
+					      distinct ? Boolean.TRUE : Boolean.FALSE,
+					      aggName,
+					      parserContext);
     }
 }
 
