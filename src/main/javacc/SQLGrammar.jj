@@ -9634,7 +9634,7 @@ aggregateExpression(String aggName, String aggClass) throws StandardException :
 }
 {
     [ distinct = setQuantifier() ] 
-    value = additiveExpression()
+    value = isSearchCondition()
     {
 	return (ValueNode)nodeFactory.getNode(NodeTypes.AGGREGATE_NODE,
 					      value,
@@ -9643,6 +9643,17 @@ aggregateExpression(String aggName, String aggClass) throws StandardException :
 					      aggName,
 					      parserContext);
     }
+    |
+    [ distinct = setQuantifier() ] 
+    value = additiveExpression()
+    {
+	return (ValueNode)nodeFactory.getNode(NodeTypes.AGGREGATE_NODE,
+					      value,
+					      aggClass,
+					      distinct ? Boolean.TRUE : Boolean.FALSE,
+					      aggName,
+					      parserContext);
+    }    
 }
 
 ValueNode

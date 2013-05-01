@@ -1,0 +1,104 @@
+com.akiban.sql.parser.CursorNode@6564dbd5
+name: null
+updateMode: UNSPECIFIED
+statementType: SELECT
+resultSet: 	
+	com.akiban.sql.parser.SelectNode@409cb0f4
+	isDistinct: false
+	resultColumns: 		
+		com.akiban.sql.parser.ResultColumnList@6f25844f
+
+		[0]:		
+		com.akiban.sql.parser.ResultColumn@18a49e0
+		exposedName: nss
+		name: nss
+		tableName: null
+		isDefaultColumn: false
+		type: null
+		expression: 			
+			com.akiban.sql.parser.AggregateNode@1f82982
+			aggregateName: COUNT
+			operator: null
+			methodName: null
+			type: null
+			operand: 				
+				com.akiban.sql.parser.ColumnReference@16d2633
+				columnName: nss
+				tableName: null
+				type: null
+		[1]:		
+		com.akiban.sql.parser.ResultColumn@e70e30
+		exposedName: employments w/ wage
+		name: employments w/ wage
+		tableName: null
+		isDefaultColumn: false
+		type: null
+		expression: 			
+			com.akiban.sql.parser.AggregateNode@154864a
+			aggregateName: COUNT
+			operator: null
+			methodName: null
+			type: null
+			operand: 				
+				com.akiban.sql.parser.NotNode@3c9217
+				operator: not
+				methodName: not
+				type: null
+				operand: 					
+					com.akiban.sql.parser.IsNullNode@9b42e6
+					operator: is null
+					methodName: isNull
+					type: null
+					operand: 						
+						com.akiban.sql.parser.ColumnReference@14520eb
+						columnName: wage
+						tableName: null
+						type: null
+		[2]:		
+		com.akiban.sql.parser.ResultColumn@1742700
+		exposedName: different wages
+		name: different wages
+		tableName: null
+		isDefaultColumn: false
+		type: null
+		expression: 			
+			com.akiban.sql.parser.AggregateNode@acb158
+			aggregateName: COUNT
+			operator: null
+			methodName: null
+			type: null
+			operand: 				
+				com.akiban.sql.parser.ColumnReference@1af33d6
+				columnName: wage
+				tableName: null
+				type: null
+	fromList: 		
+		com.akiban.sql.parser.FromList@17431b9
+
+		[0]:		
+		com.akiban.sql.parser.FromBaseTable@16c79d7
+		tableName: employment
+		updateOrDelete: null
+		null
+		correlation Name: null
+		null
+	whereClause: 		
+		com.akiban.sql.parser.BinaryRelationalOperatorNode@b33d0a
+		operator: >
+		methodName: greaterThan
+		type: null
+		leftOperand: 			
+			com.akiban.sql.parser.ExtractOperatorNode@16c9867
+			fieldName: YEAR
+			operator: EXTRACT YEAR
+			methodName: year
+			type: null
+			operand: 				
+				com.akiban.sql.parser.ColumnReference@89cc5e
+				columnName: dob
+				tableName: null
+				type: null
+		rightOperand: 			
+			com.akiban.sql.parser.NumericConstantNode@c837cd
+			value: 1940
+			type: INTEGER NOT NULL
